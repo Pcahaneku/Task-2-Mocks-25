@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
+    <link rel="stylesheet" href="/static/register.css">
 </head>
 <body>
     
@@ -15,9 +16,9 @@
             <h2>Register</h2>
         <div>
             <!--User Registration Form-->
-            <form>
+            <form class="forms" action="{{url_for('register')}}" method="POST">
 
-                <input type='text', name="full_Name", placeholder="Full Name" required>
+                <input type='text', name="fullname", placeholder="Full Name" required>
 
                 <input type='email', name="email", placeholder="Email Address" required>
                 
