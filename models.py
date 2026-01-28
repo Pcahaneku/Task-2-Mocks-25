@@ -11,5 +11,8 @@ class User(db.Model):
     dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String, nullable=False)
 
+
+        
+
 def __repr__(self): 
         return f'<User {self.fullname}>'

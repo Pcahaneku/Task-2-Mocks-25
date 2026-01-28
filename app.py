@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from models import db, User
 from datetime import datetime
 from flask_bcrypt import Bcrypt
@@ -6,7 +6,8 @@ from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-app.secret_key = "a_very_secret_random_string"
+
+app.secret_key = "secret_key" #Flask messages require a secret key
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rolsa.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,63 +23,83 @@ def homepage():
     return render_template('homepage.html')
 
 #This leads users to the Registration Page
-@app.route('/register') 
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html') 
-
-@app.route('/register', methods=['POST'])
-def add_users():
 
     if request.method == "POST":
 
-        fullname = request.form.get("fullname").strip()
+        fullname = request.form.get("fullname", "").strip()
         email = request.form.get("email").strip()
         plain_password = request.form.get('password').strip()
-        hashed_password = bcrypt.generate_password_hash(plain_password).decode('utf-8')
         dob = request.form.get("dob").strip()
         gender = request.form.get("gender")
 
-#validation
-    if not fullname or not email or not plain_password or not dob or not gender:
-        flash('All fields are required!')
-        return redirect(url_for("register"))
-    
-    elif len(plain_password) > 8:
-        flash('Password must be up to 8 characters')
-        return redirect(url_for("register"))
-    
-    elif len(plain_password) <= 7:
-        flash('Password must be at least 8.')
-        return redirect(url_for("register"))
+    # Validations for Registration forms
+        existing_user = User.query.filter((User.fullname == fullname) | (User.email == email)).first()
+        if existing_user:
+            if existing_user.fullname == fullname:
+                return render_template("register.html", message="Username already exists", message_type="error")
+        
+            elif existing_user.email == email:
+                return render_template("register.html", message="Email already registered", message_type="error")
+            
+        if not fullname or not email or not plain_password or not dob or not gender: 
+            return render_template("register.html", message="All fields are required", message_type="error")
+        
+        if not "@" in email and "." not in email: 
+            return render_template("register.html", message="Invalid email format", message_type="error")
+        
+        if len(plain_password) < 8 or len(plain_password) > 20:
+            return render_template('register.html', message="Password must be between 8 and 20 characters long", message_type="error")
 
-    elif dob:
         try:
-            dob = datetime.strptime(dob, '%Y-%m-%d').date() #Converts the date of birth string to a date object
+            dob = datetime.strptime(dob, '%Y-%m-%d').date()
         except ValueError:
-            return "Invalid date format. Please use YYYY-MM-DD."
+            return render_template('register.html', message="Invalid date format. Use YYYY-MM-DD", message_type="error")
 
-    elif gender not in ["Male", "Female", "Other"]:
-        flash('Invalid gender selection')
-        return redirect(url_for("register"))
+    # Gender validation
+        if gender not in ["Male", "Female", "Other"]:
+            return render_template('register.html', message="Invalid gender selection", message_type="error")
     
-    else:
-        flash('User Registered Successfully!')
-        return redirect(url_for('login'))
-    
+        hashed_password = bcrypt.generate_password_hash(plain_password).decode('utf-8')
+
      #save to database 
-    save_user = User(fullname=fullname, email=email, password=hashed_password, dob=dob, gender=gender)
+        try: 
+            save_user = User(fullname=fullname, email=email, password=hashed_password, dob=dob, gender=gender)
+            db.session.add(save_user)
+            db.session.commit()
+            return render_template('login.html', message="Registration successful!", message_type="success")
+        except Exception as e:
+            return render_template("register.html", message=f"An error occurred: {e}", message_type="error")
+        
+    return render_template('register.html')
 
-    try: 
-        db.session.add(save_user)
-        db.session.commit()
-        return render_template('/login.html')
-    except Exception as e:
-        return f"An error occured: {e}"
-
-@app.route('/login')
+#This leads users to the Login Page
+@app.route('/login', methods=['GET','POST'])
 def login():
-    return render_template('login.html')
 
+    if request.method == 'POST':
+
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(email = email).first()
+
+    #Validations for the Login Form
+        if user and bcrypt.check_password_hash(user.password, password):   
+            #This stores users info in session
+            session['user_id'] = user.id
+            session['user_name'] = user.fullname
+
+            flash("You've been logged in successfuly!", "success")  
+        
+            return redirect(url_for('articles'))
+        else:
+            flash("Login Failed, Please check your Email Address and Password and Try Again.", "error")
+            return redirect("login")
+        
+    return render_template('login.html')
+ 
 @app.route('/carbon_footprint.html')
 def carbon_footprint():
     return render_template('carbon_footprint.html')
@@ -92,9 +113,17 @@ def schedule():
     return render_template('schedule.html')
 
 
-@app.route('/information.html')
-def info():
-    return render_template('information.html')
+@app.route('/articles.html')
+def articles():
+
+    # To ensure users have been logged in to access the articles page. 
+    if 'user_id' not in session:
+        flash("Please ensure you've been logged in to view this content!", "error")
+        return redirect(url_for("login"))
+
+    return render_template('articles.html')
+
+
 
 @app.route('/admin')
 def admin():

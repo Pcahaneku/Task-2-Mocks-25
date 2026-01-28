@@ -7,8 +7,34 @@
 </head>
 <body>
     
-    <h1>Hello World!</h1>
+    <div class="container"> 
+    <h3 class="text">Welcome Back</h3>
+    <h1 class="text"><b>LOG IN</b></h1>
 
+    <!--Login Form-->
+    <form class="forms" action="{{url_for('login')}}" method="POST">
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+         
+        <p>Don't have an Account?</p>
+        <button type="submit" class="btn">LOGIN</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <p>
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+</div>
+
+<!--style="color: {% if category == 'error' %}red{% else %}green{% endif %};"-->
 
 
 </body>
