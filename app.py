@@ -81,22 +81,23 @@ def login():
     if request.method == 'POST':
 
         email = request.form.get('email')
-        password = request.form.get('password')
+        plain_password =  request.form.get('password').strip()
 
         user = User.query.filter_by(email = email).first()
 
     #Validations for the Login Form
-        if user and bcrypt.check_password_hash(user.password, password):   
+        if user and bcrypt.check_password_hash(user.password, plain_password):   
             #This stores users info in session
             session['user_id'] = user.id
-            session['user_name'] = user.fullname
+            session['user_email'] = user.email
 
-            flash("You've been logged in successfuly!", "success")  
-        
-            return redirect(url_for('articles'))
+            return render_template('articles.html', message="You've been logged in successfuly!", message_type="success")
+            
+        if not email or not plain_password:
+             return render_template("login.html", message="All fields are required", message_type="error")
+
         else:
-            flash("Login Failed, Please check your Email Address and Password and Try Again.", "error")
-            return redirect("login")
+            return render_template('login.html', message="Login Failed, Please check your Email Address and Password and Try Again",  message_type="error")
         
     return render_template('login.html')
  
@@ -116,10 +117,10 @@ def schedule():
 @app.route('/articles.html')
 def articles():
 
+
     # To ensure users have been logged in to access the articles page. 
     if 'user_id' not in session:
-        flash("Please ensure you've been logged in to view this content!", "error")
-        return redirect(url_for("login"))
+        return render_template('articles.html', message="Please ensure you've been logged in to view this content!", message_type="error")
 
     return render_template('articles.html')
 

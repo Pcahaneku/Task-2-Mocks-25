@@ -12,45 +12,55 @@
 
     </nav>
 
-    <div>
-            <h2>Register</h2>
-        <div>
-            <!--User Registration Form-->
-            <form class="forms" action="{{url_for('register')}}" method="POST">
+  
+    <div class="form-container">
 
-                <input type='text', name="fullname", placeholder="Full Name" >
-                <br>
-                <br>
-                <input type='email', name="email", placeholder="Email Address" >
-                <br>
-                <br>
-                <input type='password', name="password", placeholder="Password" >
-                <br>
-                <br>
-                <input type='date', name="dob", placeholder="Date of Birth" >
-                <br>
-                <br>
-                <label>Gender:</label>
-                <div class="gender_options">
-                    <label><input type='radio', name="gender", value="Male" >Male</label>
 
-                    <label><input type='radio', name="gender", value="Female" >Female</label>
+        <!--User Registration Form-->
+        <form class="forms" action="{{url_for('register')}}" method="POST">
+
+        {% if message %}
+            <div class="message {% if message_type == 'error'%}error{% elif message_type == 'success'%}success{% endif %}">{{ message }}</div>
+        {% endif %}
+        
+            <div>
+                <h2 class="register">Register</h2>
+            </div>
+
+            <input type='text', name="fullname", placeholder="Full Name" required>
+                <br>
+                <br>
+            <input type='email', name="email", placeholder="Email Address" required>
+                <br>
+                <br>
+            <input type='password', name="password", placeholder="Password" required>
+                <br>
+                <br>
+            <input type='date', name="dob", placeholder="Date of Birth" required>
+                <br>
+                <br>
+
+            <label class="gender">Gender:</label>
+            <div class="gender_options">
+                <label><input type='radio', name="gender", value="Male" required>Male</label>
+
+                <label><input type='radio', name="gender", value="Female" required>Female</label>
                 
-                    <label><input type='radio', name="gender", value="Other" >Other</label>
-                </div>
+                <label><input type='radio', name="gender", value="Other" required>Other</label>
+            </div>
 
                 <br>
-                <label><input type='checkbox', name="gender", value="Other" >I agree the <a href="#">Terms</a> and <a href="#">Conditions</a> of the website</label>
+            <label><input type='checkbox', name="gender", value="Other" required>I agree the <a class="link" href="#">Terms</a> and <a class="link" href="#">Conditions</a> of the website</label>
 
                 <br>
                 <br>
-                <button type="submit">REGISTER</button>
-            </form>
+            <button type="submit">REGISTER</button>
 
-            {% if message %}
-                <p style="color: red;">{{ message }}</p>
-            {% endif %}
-        </div>
+            <p>Already have an Account? <a class="login" href="{{url_for ('login')}}"> Log In </a></p>
+        </form>
+
+        
+
     </div>
 
 
