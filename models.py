@@ -11,7 +11,15 @@ class User(db.Model):
     dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String, nullable=False)
 
-
+#Energy Usage 
+class Record(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    appliance =  db.Column(db.String, unique=True, nullable=False)
+    watts =  db.Column(db.Float, unique=True, nullable=False)
+    hours =  db.Column(db.Float, unique=True, nullable=False)
+    cost_per_kwh =  db.Column(db.Float, unique=True, nullable=False)
+    time_period =  db.Column(db.String, unique=True, nullable=False)
         
 
 def __repr__(self): 

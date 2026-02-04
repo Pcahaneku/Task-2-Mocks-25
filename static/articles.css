@@ -1,3 +1,4 @@
+
 *{
     text-decoration: none;
     padding: 0;
@@ -7,10 +8,11 @@
 
 body { 
     font-family: Arial, Helvetica, sans-serif; 
-    background-color: #C1DD93;
+    background-color: #90e0eb;
 }
 
-/*Styling the Nvaigation Bar*/
+
+/*Styling the Navigation Bar*/
 .container {
     max-width: 100%;
     margin: 0 auto;
@@ -61,16 +63,18 @@ li:hover{
     height: 100px;
 }
 
-hr{
-    margin: 10px;
-    border: none;
-    border-top: 1px solid #ffffff;
-}
-
-.container2{
+.head-container{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
-    color: #ffffff;
+    font-size: large; 
+    padding-top: 10px;
+}
+
+.card, p{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
 }

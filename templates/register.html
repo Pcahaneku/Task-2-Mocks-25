@@ -8,9 +8,27 @@
 </head>
 <body>
     
-    <nav>
+    <!--Navigation Bar-->
+    <div class="container">
+        <nav>
 
-    </nav>
+            <label class="logo"><a href="/"><img src="/static/Images/RLST_Logo.png"></a></label>
+
+            <div>
+                <ul  class="links">
+                    <li><a href="/articles.html">Articles</a></li>
+                    <li><a href="/carbon_footprint.html">Carbon Footprint</a></li>
+                    <li><a href="/energy_usage.html">Energy Usage</a></li>
+                    <li><a href="/schedule.html">Schedule</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+
+            <div class="contact-container">
+                    <p><a href="#"><b>Call Us:</b> 0129 475 0067</a></p>
+            </div>
+        </nav>
 
   
     <div class="form-container">
@@ -58,11 +76,11 @@
 
             <p>Already have an Account? <a class="login" href="{{url_for ('login')}}"> Log In </a></p>
         </form>
-
-        
-
     </div>
 
+<div>
+    <script src="/static/register.js"></script>
+</div>
 
 
 </body>

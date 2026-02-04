@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/energy_usage.css">
+    <title>Energy Usage Calculator</title>
+</head>
+<body>
+    
+    <!--Navigation Bar -->
+    <div class="container">
+        <nav>
+
+            <label class="logo"><a href="/"><img src="/static/Images/RLST_Logo.png"></a></label>
+
+            <div>
+                <ul  class="links">
+                    <li><a href="/articles.html">Articles</a></li>
+                    <li><a href="/carbon_footprint.html">Carbon Footprint</a></li>
+                    <li><a href="/schedule.html">Schedule</a></li>
+                    <li><a href="/">Home</a></li>
+                </ul>
+            </div>
+
+            <div class="contact-container">
+                    <p><a href="#"><b>Call Us:</b> 0129 475 0067</a></p>
+            </div>
+        </nav>
+    </div>
+
+    <!--Energy Usage Calculator-->
+<div class="calculate">
+    <div class="header-container">
+        <h1 class="header"> Calculate Your Energy Usage</h1>
+    </div>
+        <hr>
+
+        <br>
+        <br>
+        <br>
+
+        <form class="forms" action="{{url_for('energy_usage')}}" method="POST">
+
+            <label>What Appliance is it?</label>
+            <input type='text', name="appliance", placeholder="Enter Appliance" required>
+                <br>
+                <br>
+            <label>What is the power rating (Watts)?</label>
+            <input type='number', name="watts", placeholder="Enter power rating" step="0.01" min="0" required>
+                <br>
+                <br>
+            <label>How many hours do you use it each day?</label>
+            <input type='number', name="hours", placeholder="Enter Hours" step="0.01" min="0"required>
+                <br>
+                <br>
+            <label>What's the cost per kWh?</label>
+            <input type='text', name="cost_per_kwh", placeholder="Enter Cost in £" step="0.0001" min="0" required>
+                <br>
+                <br>
+            <label>What's the time period (daily, weekly, monthly)?</label>
+            <select name="time_period" required>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+                <br>
+                <br>
+            <div class="btn2-container">
+                <button class="btn2" type="submit">Calculate -></button>
+            </div>
+
+        </form>
+
+        <hr class="line">
+
+        {% if result%}
+        <div class="result"> 
+            <p><strong>Appliance:</strong> {{ result.appliance }}</p>
+            <p><strong>Energy Used:</strong> {{ result.totalkwh }} kWh ({{ result.time_period }})</p>
+            <p><strong>Total Cost:</strong> £{{ result.total_cost }}</p>
+        </div>
+        {% endif%}
+</div>
+
+<div>
+    <script src="/static/energy_usage.js"></script>
+</div>
+
+</body>
+</html>

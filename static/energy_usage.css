@@ -1,0 +1,151 @@
+*{
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body { 
+    font-family: Arial, Helvetica, sans-serif; 
+    background-color: #F8D094;
+}
+
+
+.calculate{
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 90px;
+    padding: 100px;
+    margin: 30px;
+}
+
+/*Styling the Nvaigation Bar*/
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+nav{
+    display: flex;
+    box-sizing: border-box;
+    align-items: center; /* Vertically center logo and links */
+    justify-content: space-between;
+    background-color: #D2EEFF;
+    padding: 10px 20px;
+    width: 100%;
+    list-style: none;
+}
+
+label img{
+    width: 180px;
+    height: auto;
+}
+
+nav ul{
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+nav ul li a{
+    color: #134a6d;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: auto;
+}
+
+li:hover{
+    background-color: rgb(245, 251, 255);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.contact-container a{
+    color:#134a6d ;
+    font-size: 20px;
+}
+
+.contact-container{
+    padding: 30px;
+    height: 100px;
+}
+
+.header-container{
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    margin: 30px;
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #6E8C3D;
+}
+
+.btn2-container{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.forms{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.btn2{
+    text-align: center;
+    margin: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    width: 60%;
+    background-color: #F8D094 ;
+}
+
+.btn2 {
+    text-transform: uppercase;
+    color: #6E8C3D;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn2:hover{
+    color: #F8D094;
+    background-color: #6E8C3D;
+}
+
+input, select{
+    padding: 10px;
+    margin-top: 10px;
+}
+
+label, select{
+    font-size: larger;
+}
+
+hr{
+    margin-bottom: 10px;
+    border: none;
+    border-top: 1px solid #000000;
+}
+
+.result{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #478ac9;
+    font-size: larger;
+}
+
+footer{
+    color:#000000;
+    background-color: #D2EEFF;
+}
+

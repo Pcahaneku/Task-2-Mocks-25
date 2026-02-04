@@ -3,7 +3,6 @@ from models import db, User
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
-
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
@@ -105,9 +104,51 @@ def login():
 def carbon_footprint():
     return render_template('carbon_footprint.html')
 
-@app.route('/energy_usage.html')
+@app.route('/energy_usage.html', methods=["GET", "POST"])
 def energy_usage():
-    return render_template('energy_usage.html')
+    result = None
+
+    if request.method == "POST":
+        try:
+            appliance = request.form["appliance"]
+            watts = float(request.form["watts"])
+            hours = float(request.form["hours"])
+            cost_per_kwh = float(request.form["cost_per_kwh"])
+            time_period = request.form["time_period"]
+
+        # validate watts, hours and cost+per_kwh errors.
+            if watts < 0 or hours < 0 or cost_per_kwh < 0:
+                raise ValueError ("Inputs must not be negative.")
+        # to calculate the daily energy usage in kwh
+            dailyKwh = (watts / 1000) * hours
+        #To adjust chosen time period
+            if time_period == "weekly":
+                totalkwh = dailyKwh * 7 
+            elif time_period == "monthly":
+                totalkwh = dailyKwh * 30
+            else: 
+                totalkwh = dailyKwh
+        #To calculate the total cost 
+            total_cost = totalkwh *cost_per_kwh
+
+        #Display Result
+            result = {
+                "appliance": appliance,
+                "totalkwh": round(totalkwh),
+                "total_cost": round(total_cost, 4),
+                "time_period": time_period.capitalize()
+        }
+        except ValueError:     
+            result = {
+                "appliance": "Invalid",
+                "energy_kwh": "Invalid",
+                "total_cost": "Invalid",
+                "time_period": ""
+            }
+
+    return render_template('energy_usage.html', result=result)
+
+
 
 @app.route('/schedule.html')
 def schedule():
